@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Logger & Link Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>IP Logger & Link Generator</h1>
+        <button onclick="generateLink()">Generate Tracking Link</button>
+        <p id="generated-link"></p>
+        <h2>Tracked IPs</h2>
+        <div id="ip-logs"></div>
+    </div><style>
+    body {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: black;
+        color: #00ff00;
+        text-align: center;
+        padding: 20px;
+    }
+    .container {
+        border: 2px solid #00ff00;
+        padding: 20px;
+        display: inline-block;
+    }
+    button {
+        background-color: #00ff00;
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+</style>
+
+<script>
+    function generateLink() {
+        let uniqueID = Math.random().toString(36).substr(2, 9);
+        let trackingLink = `${window.location.origin}/track.html?id=${uniqueID}`;
+        document.getElementById('generated-link').innerHTML = `Your Tracking Link: <a href="${trackingLink}" target="_blank">${trackingLink}</a>`;
+    }
+
+    async function trackIP() {
+        let response = await fetch('https://ip-api.com/json/');
+        let data = await response.json();
+        let logEntry = `<p><strong>IP:</strong> ${data.query} | <strong>Location:</strong> ${data.city}, ${data.country} | <strong>ISP:</strong> ${data.isp}</p>`;
+        document.getElementById('ip-logs').innerHTML += logEntry;
+    }
+    window.onload = trackIP;
+</script>
+
+</body>
+</html>
